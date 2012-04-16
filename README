@@ -1,1 +1,16 @@
-Unoffical Najdi.si SMS API
+*An unofficial Najdi.si SMS API*
+This an unofficial najdi.si SMS API allows you texting from a PHP scripts.
+
+*How to run it*
+For an example run a file send_sms.php as written in the line below
+php send_sms.php -u joe -p smith -n "031 123 456" -m "Knock, knock there is a PHP script."
+
+*Debugging*
+Open a file send_sms.php with your text editor and set a defined DEBUG variable value to 1.
+
+*License*
+This not an official Najdi.si SMS API is licensed under GNU GPL version 3 license (http://www.gnu.org/licenses/gpl-3.0.txt) except as noted otherwise.
+
+*EOF*
+This project brought to you by spidermanlabs.com
+

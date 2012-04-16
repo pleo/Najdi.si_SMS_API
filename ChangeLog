@@ -1,0 +1,19 @@
+2012-04-16: Version 0.1.1
+
+    Added function to parse command options.
+    ca directory removed.
+    Replaced an indentation with four spaces.
+
+
+2012-04-13: Version 0.1
+
+    First public version.
+
+
+2011-06-23: Version 0.01
+
+    Initial private version.
+
+# Local Variables:
+# mode:text
+# End

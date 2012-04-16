@@ -1,9 +1,9 @@
 <?php
 
 /*
- * Unoffical najdi.si SMS API
- * Copyright 2011 Leon Pajk
-  *
+ * An unofficial najdi.si SMS API
+ * Copyright 2012 Leon Pajk
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -24,20 +24,75 @@ define('NUM_OF_REDIRECTS', 10);
 define('TIMEOUT', 30);
 define('USER_AGENT', 'Mozilla/5.0 (Ubuntu; X11; Linux i686; rv:8.0) Gecko/20100101 Firefox/8.0');
 
-$login_user = 'user';
+$login_user = 'username';
 $login_pass = 'password';
-
-$message = 'foo bar';
+$message = 'text message';
 $phone_number ='031 123 456';
 
+processOptions($login_user, $login_pass, $message, $phone_number);
 login($login_user, $login_pass);
 get_cookies();
 send_message($phone_number, $message);
 
 /*
+ * Parse an options passed to the script.
+ * Required options are:
+ *   -u username
+ *   -p password
+ *   -n number
+ *   -m textmessage
+ *
+ * Optional option is:
+ *   -h print out a brief summary of script options and exit
+ *
+ * If you won't supply required options,
+ * help message will be printed to stdout.
+ */
+function processOptions(&$login_user, &$login_pass, &$message, &$phone_number) {
+    if(!defined('STDIN')) {
+        echo("Dear Jim, switch to CLI!\n");
+        exit (1);
+    }
+    
+    $options   = "u:p:n:m:h::d::";
+    $arguments = getopt($options);
+    $numOfArgs = count($arguments);
+    $printHelp = false;
+    
+    if ($numOfArgs >= 4) {
+      foreach ($arguments as $key => $value) {
+        if ($key == 'h') {
+          $printHelp = true;
+          break;
+        }
+      }
+    } else {
+      $printHelp = true;
+    }
+    
+    if ($printHelp) {
+      $usage = array("Usage: " . basename(__FILE__) . " [options] arg\n\n",
+                     "Options:\n",
+                     "\t-h show this help message and exit\n",
+                     "\t-u username of your najdi.si account\n",
+                     "\t-p password of your najdi.si account\n",
+                     "\t-n destination mobile phone number\n",
+                     "\t-m text message\n"
+      );
+      print implode($usage);
+      exit (0);
+    } else {
+      $login_user = $arguments['u'];
+      $login_pass = $arguments['p'];
+      $message    = $arguments['m'];
+      $phone_number = $arguments['n'];
+    }
+}
+
+/*
  * Login to najdi.si
  */
-function login($login_user, $login_pass) {
+function login(&$login_user, &$login_pass) {
     $url = 'https://id.najdi.si/login/j_spring_security_check';
     
     # init cURL session with given url
@@ -163,21 +218,21 @@ function get_cookies() {
 /*
  * Check if digits length is equal to 3
  */
-function dlen3($str) {
-  return preg_match('/^\d{3}$/', $str);
+function dlen3(&$str) {
+    return preg_match('/^\d{3}$/', $str);
 }
 
 /*
  * Check mobile network code
  */
-function dmnc($str) {
-  return preg_match('/^(031|041|051|071|030|040|064|070)$/', $str);
+function dmnc(&$str) {
+    return preg_match('/^(031|041|051|071|030|040|064|070)$/', $str);
 }
 
 /*
  * Send message to given phone number
  */
-function send_message($phone_number, $message) {
+function send_message(&$phone_number, &$message) {
     if(strlen($phone_number) != 11) {
         return false;
     }
