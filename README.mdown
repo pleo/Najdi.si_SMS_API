@@ -3,7 +3,7 @@
 <dd>This an unofficial najdi.si SMS API allows you texting from a PHP scripts.</dd>
 
 <dt>How to run it</dt>
-<dd>For an example run a file send_sms.php as written in the line below
+<dd>For an example run a file send_sms.php as written in the line below<br/>
 php send_sms.php -u joe -p smith -n "031 123 456" -m "Knock, knock there is a PHP script."
 </dd>
 
